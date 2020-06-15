@@ -28,7 +28,10 @@ void BitapSearch::and_vectors() {
 }
 
 bool BitapSearch::substr_entrance_found() {
-	return ancestor[ancestor.size() - 1]; 
+	if (ancestor.size() > 0) {
+		return ancestor.back();
+	}
+	return false;
 }
 
 bool BitapSearch::find_substr(const std::string& pattern_) {
