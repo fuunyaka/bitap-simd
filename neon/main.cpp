@@ -1,15 +1,17 @@
 #include <benchmark/benchmark.h>
+#include <iostream>
 
 extern "C" bool bitap(const char* str, std::size_t str_size, const char* pattern, std::size_t pattern_size);
 
 
-static void BM_SomeFunction(benchmark::State& state) {
+static void BenchTest(benchmark::State& state) {
     for (auto _ : state) {
-        bool found = bitap("beebabubba", sizeof("beebabubba"), "eebabubb", sizeof("eebabubb"));
-        std::cout<< "Found: " << found << std::endl;
+        char str[] = "beebabubba";
+        char pattern[] = "bubb";
+        bool found = bitap(str, sizeof(str), pattern, sizeof(pattern));
     }
 }
 
 
-BENCHMARK(BM_SomeFunction);
+BENCHMARK(BenchTest);
 BENCHMARK_MAIN();

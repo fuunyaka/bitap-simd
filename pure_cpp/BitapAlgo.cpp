@@ -3,14 +3,12 @@
 #include <benchmark/benchmark.h>
 
 
-static void BM_SomeFunction(benchmark::State& state) {
+static void BenchTest(benchmark::State& state) {
     for (auto _ : state) {
-        // This code gets timed
         BitapSearch engine("beebabubba");
-        bool found = engine.find_substr("eebabubb");
+        bool found = engine.find_substr("bubb");
     }
 }
-// Register the function as a benchmark
-BENCHMARK(BM_SomeFunction);
-// Run the benchmark
+
+BENCHMARK(BenchTest);
 BENCHMARK_MAIN();
