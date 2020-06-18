@@ -26,7 +26,7 @@ endif ()
 
 set(SOURCE_FILES
         main.cpp
-        bitap_simd.s
+        bitap_simd.S
         )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

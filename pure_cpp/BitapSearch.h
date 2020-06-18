@@ -1,18 +1,18 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <boost/dynamic_bitset/dynamic_bitset.hpp>
 
 class BitapSearch
 {
-	std::vector<bool> ancestor;
-	std::vector<bool> offspring;
+	boost::dynamic_bitset<> ancestor;
+	std::vector<boost::dynamic_bitset<>> offsprings;
 	std::string str;
 	std::string pattern;
 
-	void shift_ancestor();
-	void fill_offspring_vector(const char symbol);
-	void and_vectors();
-	bool substr_entrance_found();
+	boost::dynamic_bitset<> get_offspring(const char symbol);
+	void push_offspring_vector(const char symbol);
+	void precalculate_table_fill();
 
 public:
 	BitapSearch() = default;
@@ -20,4 +20,3 @@ public:
 	~BitapSearch() = default;
 	bool find_substr(const std::string& pattern_);
 };
-

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(bitap_cpp VERSION 0.0.0 LANGUAGES CXX)
 
+set(BOOST_INCLUDEDIR /usr/include/boost)
+
+find_package( Boost 1.65.1)
+
 include(FetchContent)
 
 FetchContent_Declare(googletest
@@ -30,7 +34,6 @@ set(SOURCE_FILES
         )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC include ${Boost_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} benchmark::benchmark)
-
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)

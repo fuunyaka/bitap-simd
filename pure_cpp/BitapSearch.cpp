@@ -3,48 +3,43 @@
 
 BitapSearch::BitapSearch(const std::string& str_) : str(str_) {}
 
-
-void BitapSearch::shift_ancestor() {
-	std::rotate(ancestor.begin(), ancestor.end() - 1, ancestor.end());
-	ancestor[0] = true;
-	return;
+boost::dynamic_bitset<> BitapSearch::get_offspring(const char symbol) {
+	char offset = symbol - ' ';
+	return offsprings[offset];
 }
 
-void BitapSearch::fill_offspring_vector(const char symbol) {
+void BitapSearch::push_offspring_vector(const char symbol) {
+	boost::dynamic_bitset<> offspring;
 	offspring.resize(pattern.size());
-	for (std::size_t i = 0; i < pattern.size(); i++) {
-		if (pattern[i] == symbol)
-			offspring[i] = true;
+	for (std::size_t i = 1; i < pattern.size()+1; i++) {
+		offspring[pattern.size()-i] = (pattern[i-1] == symbol);
 	}
+	offsprings.push_back(offspring);
 	return;
 }
 
-void BitapSearch::and_vectors() {
-	for (std::size_t i = 0; i < pattern.size(); i++) {
-		ancestor[i] = offspring[i] & ancestor[i];
+void BitapSearch::precalculate_table_fill() {
+	std::string alphabet = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	for (auto i : alphabet) {
+		push_offspring_vector(i);
 	}
-	offspring.clear();
-	return;
-}
-
-bool BitapSearch::substr_entrance_found() {
-	if (ancestor.size() > 0) {
-		return ancestor.back();
-	}
-	return false;
 }
 
 bool BitapSearch::find_substr(const std::string& pattern_) {
 	pattern = pattern_;
 	if (pattern.size() > str.size())
 		return false;
-
+	
+	precalculate_table_fill();
 	ancestor.resize(pattern.size());
+	
+
 	for (auto i : str) {
-		shift_ancestor();
-		fill_offspring_vector(i);
-		and_vectors();
-		if (substr_entrance_found())
+		ancestor >>= 1;
+		ancestor[ancestor.size() - 1] = true;
+		auto offspring = get_offspring(i);
+		ancestor &= offspring;
+		if (ancestor[0])
 			return true;
 	}
 	return false;
